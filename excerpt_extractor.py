@@ -1,3 +1,21 @@
+"""
+This is a simple script to automatically extract excerpts from articles. It
+requires BeautifulSoup.
+
+Usage:
+from excerpt_extractor import get_summary
+url = "http://someurl.com/goes/here"
+(title,description) = get_summary(url)
+
+==========================================
+
+Some examples, discussion, and comparison with the Facebook article extractor
+are at http://blog.davidziegler.net/post/122176962/a-python-script-to-automatically-extract-excerpts-from
+
+copyright: Copyright 2009 by David Ziegler
+license: MIT License
+website: http://github.com/dziegler/excerpt_extractor/tree/master 
+"""
 from BeautifulSoup import *
 import urllib2
 import cookielib
