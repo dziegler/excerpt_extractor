@@ -23,9 +23,7 @@ import re
 
 def cleanSoup(soup):
     # get rid of javascript, noscript and css
-    for elem in ('script','noscript','style'):
-        subtree = soup(elem)
-        [tree.extract() for tree in subtree]
+    [[tree.extract() for tree in soup(elem)] for elem in ('script','noscript','style')]
     # get rid of doctype
     subtree = soup.findAll(text=re.compile("DOCTYPE"))
     [tree.extract() for tree in subtree]
@@ -35,9 +33,7 @@ def cleanSoup(soup):
     return soup
 
 def removeHeaders(soup):
-    for header in ('h1','h2','h3','h4','h5','h6'):
-        subtree = soup(header)
-        [tree.extract() for tree in subtree]
+    [[tree.extract() for tree in soup(elem)] for elem in ('h1','h2','h3','h4','h5','h6')]
     return soup
 
 def get_summary(url):
@@ -47,7 +43,7 @@ def get_summary(url):
     soup = cleanSoup(BeautifulSoup(doc,parseOnlyThese=SoupStrainer('head')))
     
     if not soup:
-      raise ValueError, "Invalid output: %s" % url
+        raise ValueError, "Invalid output: %s" % url
     
     try:
         title = soup.head.title.string
