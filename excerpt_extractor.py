@@ -22,15 +22,10 @@ import cookielib
 import re
 
 def cleanSoup(soup):
-    # get rid of javascript
-    subtree = soup('script')
-    [tree.extract() for tree in subtree]
-    # get rid of noscript
-    subtree = soup('noscript')
-    [tree.extract() for tree in subtree]
-    # get rid of css
-    subtree = soup('style')
-    [tree.extract() for tree in subtree]
+    # get rid of javascript, noscript and css
+    for elem in ('script','noscript','style'):
+        subtree = soup(elem)
+        [tree.extract() for tree in subtree]
     # get rid of doctype
     subtree = soup.findAll(text=re.compile("DOCTYPE"))
     [tree.extract() for tree in subtree]
@@ -40,18 +35,9 @@ def cleanSoup(soup):
     return soup
 
 def removeHeaders(soup):
-    subtree = soup('h1')
-    [tree.extract() for tree in subtree]
-    subtree = soup('h2')
-    [tree.extract() for tree in subtree]
-    subtree = soup('h3')
-    [tree.extract() for tree in subtree]
-    subtree = soup('h4')
-    [tree.extract() for tree in subtree]
-    subtree = soup('h5')
-    [tree.extract() for tree in subtree]
-    subtree = soup('h6')
-    [tree.extract() for tree in subtree]
+    for header in ('h1','h2','h3','h4','h5','h6'):
+        subtree = soup(header)
+        [tree.extract() for tree in subtree]
     return soup
 
 def get_summary(url):
@@ -60,9 +46,8 @@ def get_summary(url):
     doc = opener.open(url).read()
     soup = cleanSoup(BeautifulSoup(doc,parseOnlyThese=SoupStrainer('head')))
     
-    if not soup.get_starttag_text():
-      print "Invalid input"
-      return None
+    if not soup:
+      raise ValueError, "Invalid output: %s" % url
     
     try:
         title = soup.head.title.string
